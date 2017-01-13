@@ -7,6 +7,8 @@
  * @copyright   Copyright (C) 20016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+defined('_JEXEC') or die('Restricted access');
+
 if (!class_exists ('checkHack')){
 	require_once JPATH_SITE . '/plugins/hikashoppayment/zarinpal/trangell_inputcheck.php';
 }
@@ -116,7 +118,9 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 						$resultStatus = abs($result->Status); 
 						if ($resultStatus == 100) {
 							$msg= $this->getGateMsg($resultStatus); 
-							$this->modifyOrder($orderId, 'confirmed', true, true); 
+							$history->notified = 1;
+							$history->data =  $result->RefID;
+							$this->modifyOrder($orderId, 'confirmed', $history, true); 
 							$app->redirect($return_url, '<h2>'.$msg.'</h2>'.'<h3>'. $result->RefID .'شماره پیگری ' .'</h3>' , $msgType='Message'); 
 							
 						} 
