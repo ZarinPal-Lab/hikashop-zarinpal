@@ -119,7 +119,7 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 						if ($resultStatus == 100) {
 							$msg= $this->getGateMsg($resultStatus); 
 							$history->notified = 1;
-							$history->data =  $result->RefID;
+							$history->data = 'شماره پیگیری '. $result->RefID;
 							$this->modifyOrder($orderId, 'confirmed', $history, true); 
 							$app->redirect($return_url, '<h2>'.$msg.'</h2>'.'<h3>'. $result->RefID .'شماره پیگری ' .'</h3>' , $msgType='Message'); 
 							
