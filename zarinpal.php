@@ -68,11 +68,11 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 			$resultStatus = abs($result->Status); 
 			if ($resultStatus == 100) {
 				//Header('Location: https://sandbox.zarinpal.com/pg/StartPay/'.$result->Authority); // local
-				if (intval($this->payment_params->merchant_id) == 0){
+				if ($this->payment_params->zaringate == 0){
 					$vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay/'.$result->Authority;
 				}
 				else {
-					$vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay'.$result->Authority.'/ZarinGate';
+					$vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay/'.$result->Authority.'/ZarinGate';
 				}
 				$this->vars = $vars;
 				return $this->showPage('end'); 	
@@ -114,12 +114,7 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 				if ($status == 'OK') { 
 					try {
 						//$client = new SoapClient('https://sandbox.zarinpal.com/pg/services/WebGate/wsdl', ['encoding' => 'UTF-8']); // for local
-						if (intval($this->payment_params->merchant_id) == 0){
-							$client = new SoapClient('https://www.zarinpal.com/pg/services/WebGate/wsdl', ['encoding' => 'UTF-8']); 
-						}
-						else {
-							$client = new SoapClient('https://www.zarinpal.com/pg/services/WebGate/wsdl/ZarinGate', ['encoding' => 'UTF-8']); 
-						}
+						$client = new SoapClient('https://www.zarinpal.com/pg/services/WebGate/wsdl', ['encoding' => 'UTF-8']); 
 						$result = $client->PaymentVerification(
 							[
 								'MerchantID' => $this->payment_params->merchant_id,
