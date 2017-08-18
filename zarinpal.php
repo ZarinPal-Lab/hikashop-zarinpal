@@ -4,7 +4,7 @@
  * @subpackage  com_Hikashop
  * @subpackage 	trangell_Zarinpal
  * @copyright   trangell team => https://trangell.com
- * @copyright   Copyright (C) 20016 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2017 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die('Restricted access');
@@ -18,7 +18,8 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 	var $multiple = true; 
 	var $name = 'zarinpal';
 	var $pluginConfig = array(
-		'merchant_id' => array("شناسه مرچند",'input')
+		'merchant_id' => array("شناسه مرچند",'input'),
+		'zaringate' => array('زرین گیت', 'boolean','0')
 	);
 
 	function __construct(&$subject, $config) {	
@@ -63,10 +64,16 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 				]
 			);
 			
+			
 			$resultStatus = abs($result->Status); 
 			if ($resultStatus == 100) {
 				//Header('Location: https://sandbox.zarinpal.com/pg/StartPay/'.$result->Authority); // local
-				$vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay/'.$result->Authority;
+				if ($this->payment_params->zaringate == 0){
+					$vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay/'.$result->Authority;
+				}
+				else {
+					$vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay/'.$result->Authority.'/ZarinGate';
+				}
 				$this->vars = $vars;
 				return $this->showPage('end'); 	
 			}
@@ -104,7 +111,7 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 			$status = $jinput->get->get('Status', '', 'STRING');
 			
 			if (checkHack::checkString($status)){
-				if ($status == 'OK') {
+				if ($status == 'OK') { 
 					try {
 						//$client = new SoapClient('https://sandbox.zarinpal.com/pg/services/WebGate/wsdl', ['encoding' => 'UTF-8']); // for local
 						$client = new SoapClient('https://www.zarinpal.com/pg/services/WebGate/wsdl', ['encoding' => 'UTF-8']); 
