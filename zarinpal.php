@@ -107,7 +107,7 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
 			$history->amount = round($Order->order_full_price,5)/10;
 			//------------------------------------------------------
 
-			$Authority = $jinput->get->get('Authority', '0', 'INT');
+			$Authority = $jinput->get->get('Authority',  'STRING');
 			$status = $jinput->get->get('Status', '', 'STRING');
 			
 			if (checkHack::checkString($status)){
