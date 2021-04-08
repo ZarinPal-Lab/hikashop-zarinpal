@@ -97,9 +97,19 @@ class plgHikashoppaymentZarinpal extends hikashopPaymentPlugin {
                     if ($result['data']['code'] == 100) {
 
                         //header('Location: https://www.zarinpal.com/pg/StartPay/' . $result['data']["authority"]);
-                        $vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay/'.$result['data']["authority"];
-                        $this->vars = $vars;
-                        return $this->showPage('end');
+                        // $vars['zarinpal'] = 'https://www.zarinpal.com/pg/StartPay/'.$result['data']["authority"];
+                        // $this->vars = $vars;
+                        // return $this->showPage('end');
+                        echo'<html><body>
+<script type="text/javascript" src="https://cdn.zarinpal.com/zarinak/v1/checkout.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+Zarinak.setAuthority("' . $result['data']['authority'] . '");
+Zarinak.showQR();
+Zarinak.open();
+};
+</script>
+</body></html>';
                     }else {
 
                         $msg= $this->getGateMsg('error');
